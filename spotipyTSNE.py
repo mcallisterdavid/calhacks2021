@@ -104,6 +104,7 @@ def getPlaylistSongs(username, playlistID, token):
 def cleanData(df):
     
     # getting only month of release date and added time
+    df = df.drop_duplicates()
     df['album_release_date'] = df['album_release_date'].str.slice(0, 4)
     df['added_time'] = df['added_time'].str.slice(0, 4)
     
@@ -121,9 +122,7 @@ def cleanData(df):
     df = pd.get_dummies(df)
         
     # normalization
-    columns_to_normalize = ['popularity', 'danceability', 'energy', 'loudness', 
-    						'speechiness', 'instrumentalness', 'liveness', 
-    						'valence', 'tempo', 'duration_ms']
+    columns_to_normalize = ['popularity', 'danceability', 'energy', 'loudness', 'speechiness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'duration_ms']
     for column in columns_to_normalize:
         df[column] = (df[column] - df[column].mean()) / df[column].std()
     
