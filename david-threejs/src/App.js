@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Canvas, useFrame, useThree} from '@react-three/fiber'
 import { OrbitControls, ScrollControls, Stars, Text, PerspectiveCamera} from "@react-three/drei"
-import { Vector3 } from 'three'
+import jsonFile from './tsneLargeDataset.json'
 
 function Box(props) {
   // This reference will give us direct access to the mesh
@@ -32,19 +32,30 @@ function Box(props) {
     // console.log(ref.current)
 
   })
+
+
+  let songClicked=()=>{
+    setActive(!active)
+    if (ref.current.name) {
+      console.log(ref.current.name)
+    }
+  }
+  
+
   return (
     <mesh
       {...props}
       ref={ref}
       scale={active ? 1.5 : 1}
-      onClick={(e) => setActive(!active)}
+      onClick={songClicked}
       onPointerOver={(e) => setHover(true)}
       onPointerOut={(e) => setHover(false)}>
-      <boxGeometry args={[0.5, 0.5, 0.5]} />
+      <sphereGeometry args={[0.15, 28, 14]} />
       <meshStandardMaterial color={hovered ? 'green' : 'red'} />
     </mesh>
   )
 }
+
 
 function randomG(v){ 
   var r = 0;
@@ -54,13 +65,30 @@ function randomG(v){
   return r / v;
 }
 
+
+function ReadTSNE() {
+  console.log(jsonFile)
+  let keys = Object.keys(jsonFile['tsne-one'])
+  let boxes = []
+  for (let i = 0; i < keys.length; i++) {
+    let track_id = keys[i]
+    let x = jsonFile['tsne-one'][track_id]
+    let y = jsonFile['tsne-two'][track_id]
+    let z = jsonFile['tsne-three'][track_id]
+    boxes.push(<Box key={i} name={track_id} position={[x, y, z]} />)
+  }
+  
+  // console.log(boxes)
+  return boxes
+}
+
 function Dolly() {
   useFrame((state) => {
     // state.camera.position.z = 10 + Math.sin(state.clock.getElapsedTime() * 4) * 8
     // state.camera.fov = 50 - Math.sin(state.clock.getElapsedTime() * 4) * 40
-    state.camera.position.y = Math.sin(state.clock.getElapsedTime()) * 8
-    state.camera.position.x = Math.cos(state.clock.getElapsedTime()) * 8
-    state.camera.position.z = Math.sin(state.clock.getElapsedTime()) * 8
+    state.camera.position.y = Math.sin(state.clock.getElapsedTime() / 8) * 8
+    state.camera.position.x = Math.cos(state.clock.getElapsedTime() / 8) * 8
+    state.camera.position.z = Math.sin(state.clock.getElapsedTime() / 8) * 8
     // let point = new useThree.Vector3(0, 0, 0);
     state.camera.lookAt(0, 0, 0)
     state.camera.updateProjectionMatrix()
@@ -78,7 +106,7 @@ function Cloud() {
 
     
 
-    console.log(gauss_x)
+    // console.log(gauss_x)
     boxes.push(<Box key={i} name={i} position={[gauss_x, gauss_y, gauss_z]} />)
   }
 
@@ -89,15 +117,12 @@ function Cloud() {
     // avg_x += curr.position.x
   }
   avg_x /= boxes.length
-  console.log(avg_x)
+  // console.log(avg_x)
 
   return boxes  
 }
 
 export default function App() {
-
-  const appRef = useRef()
-  const [test, setTest] = useState(0)
   
   return (
     <Canvas>
@@ -114,9 +139,9 @@ export default function App() {
       <ambientLight intensity={0.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
       <pointLight position={[-10, -10, -10]} />
-      <Box position={[-1.2, 0, 0]} name="Shaylan" />
-      <Box position={[1.2, 0, 0]} />
-      <Cloud />
+      <Box position={[0, 0, 0]} name="Shaylan" />
+      {/* <Cloud /> */}
+      <ReadTSNE />
       <Dolly />
     </Canvas>
   )
