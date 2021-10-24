@@ -17,7 +17,7 @@
     padding:0px;
     height: 30vmin;
     width: 30vmin;
-    bottom: 0px;
+    bottom: 50px;
     /* left: 0; */
     z-index: 1070;
     display: block;
@@ -43,4 +43,45 @@
     background-clip: padding-box;
     border: 3px solid rgba(0,0,0,.2);
     border-radius: .3rem;
+}
+
+@import url("https://rsms.me/inter/inter.css");
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #272730;
+  overflow: hidden;
+}
+
+body {
+  font-family: "Inter var", sans-serif;
+  font-size: 14px;
+  color: white;
+  background: #272730;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+canvas {
+  position: absolute;
+}
+
+.content {
+  padding-top: 10px;
+  transform: translate3d(50%, 0, 0);
+  text-align: left;
+  background: #202035;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
 }

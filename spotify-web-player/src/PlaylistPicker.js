@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Col, ListGroup, ListGroupItem} from 'react-bootstrap';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import PlaylistItem from './PlaylistItem'
 
 function PlaylistPicker({ token, setSelectedPlaylist, setTsneData }) {
@@ -10,6 +10,7 @@ function PlaylistPicker({ token, setSelectedPlaylist, setTsneData }) {
 
 
     const grabTsneData = (selectedPlaylist) => {
+        setSelectedPlaylist(selectedPlaylist);
         const queryTSNE = async () => {
           if (selectedPlaylist) {
             console.log(userData)
@@ -65,7 +66,7 @@ function PlaylistPicker({ token, setSelectedPlaylist, setTsneData }) {
     if (token) {
         if (playlists) {
             return (
-                <Container>
+                <Container style={{overflowY: "scroll", height: "100vh"}}>
                     <h1>Pick a Playlist to visualize.</h1>
                     <Col>
                         <ListGroup>

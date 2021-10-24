@@ -61,7 +61,7 @@ function App() {
     );
   } else {
     return (
-      <Visualization token={token} className="p-0 m-0"/>
+      <Visualization token={token} className="p-0 m-0" tsneData={tsneData} />
     )
   }
 }

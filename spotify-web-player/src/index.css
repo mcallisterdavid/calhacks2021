@@ -23,8 +23,47 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow-y: scroll;
+}
+
+
+@import url("https://rsms.me/inter/inter.css");
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #272730;
+  /* overflow: hidden; */
 }
 
 body {
-  background: #f0f0f0;
+  font-family: "Inter var", sans-serif;
+  font-size: 14px;
+  color: white;
+  background: #272730;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+canvas {
+  position: absolute;
+}
+
+.content {
+  padding-top: 10px;
+  transform: translate3d(50%, 0, 0);
+  text-align: left;
+  background: #202035;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
 }
