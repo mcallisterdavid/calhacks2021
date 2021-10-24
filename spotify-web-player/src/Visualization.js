@@ -253,8 +253,8 @@ function SongWindow({ url, data, token }) {
   console.log(data)
   return (
     <div className="spotify-window">
-      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0', color: "black"}}>{data.track_name} - {data.album}</h4>
-      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0', color: "black"}}>{data.artist}</h4>
+      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0', color: "white"}}>{data.track_name} - {data.album}</h4>
+      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0', color: "white"}}>{data.artist}</h4>
       <WebPlayback token={token} />
     </div>
   )
