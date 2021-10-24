@@ -1,9 +1,0 @@
-.env
-node_modules
-.venv
-.DS_Store
-__pycache__
-.venvpip
-build
-install
-waitress
