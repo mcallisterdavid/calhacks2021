@@ -31,16 +31,15 @@ Here, the user chooses a specific playlist whose songs will be rendered.
 
 ** choose a playlist and talk while it loads
 
-When we fetch data from spotify, each song has many features that spotify tracks behind the scenes, 
-such as tempo, danceability, energy, speechiness, etc. With this high-dimensional feature space, we 
-want to reduce the dimensionality to something that it comprehendible to humans, i.e. in 3D. We accomplish this
-reduction by using TSNE. 
 
-This 3d world shown here is rendered using react and 3js. Each dot here represents a song, and its coordinates are 
-given by the TSNE vectors. This means that songs that are closer together have features that are more highly correlated
-or similar to the other. 
+Our backend leverages unsupervised machine learning (t-SNE) to identify implicit similarity patterns in the playlist's songs. It analyzes tempo, energy, popularity, loudness, speechiness, valence, and more to embed songs in a three-dimensional plot for users to orbit and explore. 
+
+This point cloud renders in-browser for a seamless experience, delivering an attractive and performant user experience. We can control how we orbit the world in many ways; 's' and 'f' keys speed up the orbit, 'z' toggles the zoom. 
+'r' reverses the orbit, and space bar pauses the orbit. 
+
+Each node in the cloud is interactive. By clicking on any single one, the user can listen to the the corresponding song seamlessly through the Spotify Web Playback SDK.
+
 
 ** demo world controls
 
-We can control how we orbit the world in many ways; 's' and 'f' keys speed up the orbit, 'z' toggles the zoom. 
-'r' reverses the orbit, and space bar pauses the orbit. 
+
