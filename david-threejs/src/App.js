@@ -40,18 +40,33 @@ function Box(props) {
       console.log(ref.current.name)
     }
   }
-  
+
+  let colors=()=>{
+    let x = ref.current.position.x
+    let y = ref.current.position.y
+    let z = ref.current.position.z
+    console.log("DONKEY")
+
+    let r = Math.max(0, Math.min(parseInt(7 * x + 202), 255))
+    let g = Math.max(0, Math.min(parseInt(5 * x + 161), 255))
+    let b = Math.max(0, Math.min(parseInt(2 * x + 215), 255))
+    
+
+    return 'rgb(' + r + ', ' + g + ', ' + b + ')'
+
+
+  }
 
   return (
     <mesh
       {...props}
       ref={ref}
-      scale={active ? 1.5 : 1}
+      scale={hovered ? 1.5 : 1}
       onClick={songClicked}
       onPointerOver={(e) => setHover(true)}
       onPointerOut={(e) => setHover(false)}>
       <sphereGeometry args={[0.15, 28, 14]} />
-      <meshStandardMaterial color={hovered ? 'green' : 'red'} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : colors()} />
     </mesh>
   )
 }
@@ -85,7 +100,7 @@ function ReadTSNE() {
 function Dolly() {
   useFrame((state) => {
     // state.camera.position.z = 10 + Math.sin(state.clock.getElapsedTime() * 4) * 8
-    // state.camera.fov = 50 - Math.sin(state.clock.getElapsedTime() * 4) * 40
+    state.camera.fov = 60 - Math.sin(state.clock.getElapsedTime() / 4) * 25
     state.camera.position.y = Math.sin(state.clock.getElapsedTime() / 8) * 8
     state.camera.position.x = Math.cos(state.clock.getElapsedTime() / 8) * 8
     state.camera.position.z = Math.sin(state.clock.getElapsedTime() / 8) * 8
