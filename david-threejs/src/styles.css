@@ -33,7 +33,7 @@ canvas {
   padding-top: 10px;
   transform: translate3d(50%, 0, 0);
   text-align: left;
-  background: #202035;
+  background: rgba(32, 32, 53, 0.6);
   color: white;
   padding: 10px 15px;
   border-radius: 5px;
