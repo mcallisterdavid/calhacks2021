@@ -32,6 +32,8 @@ def main():
 	data = generate_TSNE(playlistSongs) 
 
 	return data[['artist', 'album', 'track_name', 'album_cover_url', 
+                    'danceability', 'popularity', 'energy', 'loudness', 'duration_ms',
+                    'speechiness', 'instrumentalness', 'liveness', 'tempo', 
                     'tsne-one', 'tsne-two', 'tsne-three']].to_json(orient='index')
 
 # get the playlists for the username and token; not needed for current implementation
