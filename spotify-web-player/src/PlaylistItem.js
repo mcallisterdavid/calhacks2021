@@ -6,8 +6,8 @@ function PlaylistPicker({ data }) {
         <>
             <Image style={{width: 200}} src={data.images[0]['url']} rounded fluid />
             <Col className="text-justify">
-                {data.name}
-                {data.description}
+                <h1>{data.name}</h1>
+                <h2>{data.description}</h2>
             </Col>
         </>
     )

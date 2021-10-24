@@ -3,12 +3,14 @@ import WebPlayback from './WebPlayback';
 import Login from './Login';
 import PlaylistPicker from './PlaylistPicker';
 import './App.css';
+import Visualization from './Visualization';
 
 function App() {
 
   const [selectedPlaylist, setSelectedPlaylist] = useState('');
   const [userData, setUserData] = useState({});
-  const [loadingData, setLoadingData] = useState('false');
+  const [loadingData, setLoadingData] = useState(false);
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     if (selectedPlaylist) {
@@ -16,15 +18,16 @@ function App() {
     }
   }, [selectedPlaylist])
 
-  let token = new URLSearchParams(window.location.search).get('access_token');
-  if (token) {
-    window.localStorage.setItem('token', token);
+  // Grab the token
+  let potential_token = new URLSearchParams(window.location.search).get('access_token');
+  if (potential_token && potential_token !== token) {
+    setToken(potential_token);
   }
 
   if (loadingData) {
     return (
-
-    )
+      <h1>Hi</h1>
+    );
   }
 
   if (!selectedPlaylist) {
@@ -32,15 +35,14 @@ function App() {
       <>
           { (!token) ? <Login/> : 
           <div>
-            <WebPlayback token={token} /> 
-            <PlaylistPicker token={token} setSelectedPlaylist={setSelectedPlaylist} />
+            <PlaylistPicker token={token} setSelectedPlaylist={setSelectedPlaylist} setUserData={setUserData} />
           </div>
           }
       </>
     );
   } else {
     return (
-
+      <Visualization token={token} className="p-0 m-0"/>
     )
   }
 }
