@@ -15,10 +15,11 @@ app = Flask(__name__, static_folder='./client/build', static_url_path='/')
 spotify_client_id = os.environ.get('SPOTIFY_CLIENT_ID')
 spotify_client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
-if os.environ.get('PRODUCTION') == 'TRUE':
-    BASE_URL = ''
-else:
-    BASE_URL = 'http://127.0.0.1:5000/'
+# if os.environ.get('PRODUCTION') == 'TRUE':
+#     BASE_URL = ''
+# else:
+#     BASE_URL = 'http://127.0.0.1:5000/'
+BASE_URL = 'https://spotify-visualization-calhacks.herokuapp.com'
 
 
 def gen_random_string(length):
