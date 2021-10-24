@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { Canvas, useFrame, useThree} from '@react-three/fiber'
-import { OrbitControls, ScrollControls, Stars, Text, PerspectiveCamera} from "@react-three/drei"
-import jsonFile from './tsneLargeDataset.json'
+import { Canvas, useFrame} from '@react-three/fiber'
+import { OrbitControls, ScrollControls, Stars, Text, PerspectiveCamera, Html} from "@react-three/drei"
+import jsonFile from './tsne800Dataset.json'
 
 function Box(props) {
   // This reference will give us direct access to the mesh
@@ -10,11 +10,12 @@ function Box(props) {
   const [hovered, setHover] = useState(false)
   const [active, setActive] = useState(false)
   const [trig, setTrig] = useState(0)
+  const [annotationVisible, setAnnotationVisible] = useState(false)
   var total = 0
   // Rotate mesh every frame, this is outside of React without overhead
   useFrame(() => {
     
-    if (ref.current.name == "Shaylan") {
+    if (ref.current.name && ref.current.name == "Shaylan") {
       ref.current.rotation.x = ref.current.rotation.y += 0.02
       // ref.current.scale.x -= 0.01
     }
@@ -45,6 +46,23 @@ function Box(props) {
 
   }
 
+
+  let annotationHidden=()=>{
+    let x = ref.current.position.x
+    let y = ref.current.position.y
+    let z = ref.current.position.z
+
+    let dx = Math.abs(x - cameraX)
+    let dy = Math.abs(y - cameraY)
+    let dz = Math.abs(z - cameraZ)
+    let manhattan = dx + dy + dz
+    console.log(manhattan)
+
+    return (hovered || manhattan < 3) ? <div className="content">{ref.current.name}</div> : null
+
+
+  }
+
   return (
     <mesh
       {...props}
@@ -55,6 +73,12 @@ function Box(props) {
       onPointerOut={(e) => setHover(false)}>
       <sphereGeometry args={[0.15, 28, 14]} />
       <meshStandardMaterial color={hovered ? 'hotpink' : 'lightblue'} />
+      <Html distanceFactor={10}>
+        {
+          hovered ? <div className="content">{ref.current.name}</div> : null
+        }
+        
+      </Html>
     </mesh>
   )
 }
@@ -68,24 +92,26 @@ function randomG(v){
   return r / v;
 }
 
-function SongLabel(label, x, y, z) {
+function SongLabel(props) {
   const ref = useRef()
   // Set up state for the hovered and active state
   
   // Rotate mesh every frame, this is outside of React without overhead
   useFrame(() => {
     console.log(ref.current)
+    
 
 
   })
   return (
     <Text
         color="black" // default
-        anchorX={x}
-        anchorY={y}
-        anchorZ={z}
+        anchorX={props.x}
+        anchorY={props.y}
+        anchorZ={props.z}
+        ref={ref}
       >
-        hello world!
+        {props.label}
       </Text>
   )
 }
@@ -93,14 +119,15 @@ function SongLabel(label, x, y, z) {
 
 function ReadTSNE() {
   console.log(jsonFile)
-  let keys = Object.keys(jsonFile['tsne-one'])
+  let keys = Object.keys(jsonFile)
   let boxes = []
   for (let i = 0; i < keys.length; i++) {
     let track_id = keys[i]
-    let x = jsonFile['tsne-one'][track_id]
-    let y = jsonFile['tsne-two'][track_id]
-    let z = jsonFile['tsne-three'][track_id]
-    boxes.push(<Box key={i} name={track_id} position={[x, y, z]} />)
+    let x = jsonFile[track_id]['tsne-one']
+    let y = jsonFile[track_id]['tsne-two']
+    let z = jsonFile[track_id]['tsne-three']
+    // boxes.push(<SongLabel label={track_id} x={x} y={y} z={z} />)
+    boxes.push(<Box key={i} name={jsonFile[track_id]['track_name']} position={[x, y, z]} />)
   }
   
   // console.log(boxes)
@@ -213,21 +240,21 @@ export default function App() {
       {/* <OrbitControls />
       <ScrollControls /> */}
 
-      <Text
+      {/* <Text
         color="black" // default
         anchorX="center" // default
         anchorY="middle" // default
       >
         hello world!
-      </Text>
+      </Text> */}
       <ambientLight intensity={0.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
       <pointLight position={[-10, -10, -10]} />
-      <Box position={[0, 0, 0]} name="Shaylan" />
+      {/* <Box position={[0, 0, 0]} name="Shaylan" /> */}
       {/* <Cloud /> */}
       <ReadTSNE />
       <Dolly />
-      <SongLabel label="DONKEY" x={10} y={10} z={10} />
+      {/* <SongLabel label="DONKEY" x={0} y={0} z={0} /> */}
     </Canvas>
   )
 }
