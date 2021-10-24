@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "./WebPlayback.css"
 
 const track = {
     name: "",
@@ -81,7 +82,7 @@ function WebPlayback({token, uri}) {
                     {current_track && 
                         <>
                         <img src={current_track.album.images[0].url} 
-                            className="now-playing__cover" alt="" />
+                            className="webplayback-img now-playing__cover" alt="" />
         
                         <div className="now-playing__side">
                             <div className="now-playing__name">{

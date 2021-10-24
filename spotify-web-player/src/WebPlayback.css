@@ -1,3 +1,7 @@
 .webplayback {
     width: 100%;
 }
+
+.webplayback-img {
+    object-fit: cover;
+}

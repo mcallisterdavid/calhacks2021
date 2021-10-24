@@ -123,12 +123,11 @@ def cleanData(df):
     ohe['album'] = df['album']
     ohe['track_name'] = df['track_name']
     
-    ohe['popularity'] = 10 * ohe['popularity']
-    ohe['danceability'] = 10 * ohe['danceability']
-    ohe['energy'] = 10 * ohe['energy']
-    ohe['instrumentalness'] = 10 * ohe['instrumentalness']
+    ohe['popularity'] = 5 * ohe['popularity']
+    ohe['danceability'] = 5 * ohe['danceability']
+    ohe['energy'] = 5 * ohe['energy']
+    ohe['instrumentalness'] = 5 * ohe['instrumentalness']
     
-#     ohe['track_id'] = df['track_id']
     ohe['album_cover_url'] = df['album_cover_url']
     
     return ohe
@@ -141,9 +140,9 @@ def generate_TSNE(df: pd.DataFrame()):
     tsne = TSNE(n_components=3, verbose=1, perplexity=40, n_iter=300)
     tsne_results = tsne.fit_transform(normed_df[normed_df.columns.difference(['artist', 'album', 'track_name', 'album_cover_url'])])
     print('t-SNE done! Time elapsed: {} seconds'.format(time.time()-time_start))
-
-    normed_df['tsne-one'] = tsne_results[:,0]
-    normed_df['tsne-two'] = tsne_results[:,1]
-    normed_df['tsne-three'] = tsne_results[:,2]
+    
+    normed_df['tsne-one'] = [np.log(x) if x > 0 else -np.log(-x) for x in tsne_results[:,0]]
+    normed_df['tsne-two'] = [np.log(y) if y > 0 else -np.log(-y) for y in tsne_results[:,1]]
+    normed_df['tsne-three'] = [np.log(z) if z > 0 else -np.log(-z) for z in tsne_results[:,2]]
     
     return normed_df
