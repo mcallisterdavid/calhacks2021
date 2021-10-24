@@ -25,7 +25,6 @@
     max-height: 276px;
     font-family: var(--bs-font-sans-serif);
     font-style: normal;
-    color: white;
     font-weight: 400;
     line-height: 1.5;
     text-align: left;
@@ -40,7 +39,7 @@
     line-break: auto;
     font-size: .875rem;
     word-wrap: break-word;
-    background-color: rgba(32, 32, 53, 0.6);
+    background-color: #fff;
     background-clip: padding-box;
     border: 3px solid rgba(0,0,0,.2);
     border-radius: .3rem;

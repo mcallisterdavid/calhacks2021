@@ -10,20 +10,17 @@ import os
 
 from spotipyTSNE import tsne_spotify
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./client/build', static_url_path='/')
 
+spotify_client_id = os.environ.get('SPOTIFY_CLIENT_ID')
+spotify_client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
-spotify_client_id='70c49e55eae64f0a82b313830c6cebf3'
-spotify_client_secret='cb5063c70a514acebca3481a37f15e01'
-# spotify_client_id = os.environ.get('SPOTIFY_CLIENT_ID')
-# spotify_client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
+app.static_folder='./build'
 
-static_folder='build'
-
-if os.environ.get('PRODUCTION') == True:
+if os.environ.get('PRODUCTION') == 'TRUE':
     BASE_URL = ''
 else:
-    BASE_URL = 'http://localhost:3000'
+    BASE_URL = 'http://127.0.0.1:5000/'
 
 
 def gen_random_string(length):
@@ -99,3 +96,6 @@ def tsne_data():
     username = data['userId']
     playlistID = data['playlistId']
     return tsne_spotify(token, username, playlistID)
+
+if __name__ == '__main__':
+    app.run(port=(os.getenv('PORT') if os.getenv('PORT') else 8000), debug=False)
