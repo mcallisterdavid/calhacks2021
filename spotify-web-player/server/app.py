@@ -12,8 +12,11 @@ from spotipyTSNE import tsne_spotify
 
 app = Flask(__name__)
 
-spotify_client_id = os.environ.get('SPOTIFY_CLIENT_ID')
-spotify_client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
+
+spotify_client_id='70c49e55eae64f0a82b313830c6cebf3'
+spotify_client_secret='cb5063c70a514acebca3481a37f15e01'
+# spotify_client_id = os.environ.get('SPOTIFY_CLIENT_ID')
+# spotify_client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
 static_folder='build'
 
@@ -41,7 +44,10 @@ def serve(path):
 def login():
     scope = "streaming \
                 user-read-email \
-                user-read-private"
+                user-read-private \
+                playlist-read-private \
+                app-remote-control \
+                "
 
     state = gen_random_string(16);
 
@@ -88,6 +94,7 @@ def auth_callback():
 @app.route('/data/tsne', methods=['POST'])
 def tsne_data():
     data = request.json
+    print(data)
     token = data['access_token']
     username = data['userId']
     playlistID = data['playlistId']

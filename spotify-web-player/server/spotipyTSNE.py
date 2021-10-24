@@ -122,6 +122,12 @@ def cleanData(df):
     ohe['artist'] = df['artist']
     ohe['album'] = df['album']
     ohe['track_name'] = df['track_name']
+    
+    ohe['popularity'] = 10 * ohe['popularity']
+    ohe['danceability'] = 10 * ohe['danceability']
+    ohe['energy'] = 10 * ohe['energy']
+    ohe['instrumentalness'] = 10 * ohe['instrumentalness']
+    
 #     ohe['track_id'] = df['track_id']
     ohe['album_cover_url'] = df['album_cover_url']
     

@@ -6,4 +6,7 @@ module.exports = function (app) {
     app.use(createProxyMiddleware(`/auth/**`, { 
         target
     }));
+    app.use(createProxyMiddleware(`/data/**`, { 
+        target
+    }));
 };
