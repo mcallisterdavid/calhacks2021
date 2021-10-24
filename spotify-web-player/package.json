@@ -23,7 +23,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "server": "export FLASK_APP=server.app && flask run",
+    "server": "export FLASK_APP=app && cd server && flask run",
     "dev": "run-p server start"
   },
   "eslintConfig": {

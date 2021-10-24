@@ -13,10 +13,27 @@ function App() {
   const [token, setToken] = useState('')
 
   useEffect(() => {
-    if (selectedPlaylist) {
-        // Make API call for data
+    const queryTSNE = async () => {
+      if (selectedPlaylist) {
+          // Make API call for data
+          let body = {
+            access_token: token,
+            userId: userData.userId,
+            playlistId: selectedPlaylist,
+          }
+          fetch("/data/tsne", {
+            body: body,
+            headers: {
+              "Content-Type": "application/json"
+            },
+            method: "POST"
+          })
+      }
+      let res = await queryTSNE()
+      let json = await res.json()
+      console.log(json)
     }
-  }, [selectedPlaylist])
+  }, [selectedPlaylist, token, userData.userId])
 
   // Grab the token
   let potential_token = new URLSearchParams(window.location.search).get('access_token');
