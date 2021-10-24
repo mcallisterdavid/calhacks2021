@@ -141,8 +141,8 @@ def generate_TSNE(df: pd.DataFrame()):
     tsne_results = tsne.fit_transform(normed_df[normed_df.columns.difference(['artist', 'album', 'track_name', 'album_cover_url'])])
     print('t-SNE done! Time elapsed: {} seconds'.format(time.time()-time_start))
     
-    normed_df['tsne-one'] = [np.log(x) if x > 0 else -np.log(-x) for x in tsne_results[:,0]]
-    normed_df['tsne-two'] = [np.log(y) if y > 0 else -np.log(-y) for y in tsne_results[:,1]]
-    normed_df['tsne-three'] = [np.log(z) if z > 0 else -np.log(-z) for z in tsne_results[:,2]]
+    normed_df['tsne-one'] = tsne_results[:,0] / np.sqrt(tsne_results[:, 0].std())
+    normed_df['tsne-two'] = tsne_results[:,1] / np.sqrt(tsne_results[:, 1].std())
+    normed_df['tsne-three'] = tsne_results[:,2] / np.sqrt(tsne_results[:, 2].std())
     
     return normed_df

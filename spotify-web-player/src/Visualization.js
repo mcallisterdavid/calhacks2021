@@ -13,15 +13,14 @@ function Box(props) {
   const [active, setActive] = useState(false)
   const [trig, setTrig] = useState(0)
   const [annotationVisible, setAnnotationVisible] = useState(false)
+  var vis = false
+
   var total = 0
   // Rotate mesh every frame, this is outside of React without overhead
   useFrame(() => {
-    
-    if (ref.current.name && ref.current.name == "Shaylan") {
-      ref.current.rotation.x = ref.current.rotation.y += 0.02
-      // ref.current.scale.x -= 0.01
-    }
-
+    let man_dist = (Math.abs(ref.current.position.x - cameraX) + Math.abs(ref.current.position.y - cameraY) + Math.abs(ref.current.position.z - cameraZ))
+    vis = (man_dist < 10 && man_dist > 6)
+    setAnnotationVisible(vis)
   })
 
 
@@ -74,7 +73,7 @@ function Box(props) {
       <meshStandardMaterial color={hovered ? 'hotpink' : 'lightblue'} />
       <Html distanceFactor={10}>
         {
-          hovered ? <div className="content">{ref.current.name}</div> : null
+          (annotationVisible || hovered) ? <div className="content">{ref.current.name}</div> : null
         }
         
       </Html>
@@ -162,6 +161,9 @@ var cameraX = 0
 var cameraY = 0
 var cameraZ = 0
 var speed = 25
+var zoom_i = 1
+var zooms = [55, 60, 75, 90]
+var zoom = 60
 
 
 function Dolly() {
@@ -192,6 +194,9 @@ function Dolly() {
           speed = Math.min(205, speed)
         } else if (e.key == "r") {
           speed *= -1
+        } else if (e.key == "z") {
+          zoom_i = (zoom_i + 1) % 4
+          zoom = zooms[zoom_i]
         }
         console.log("SPEED: " + speed)
       }
@@ -204,7 +209,7 @@ function Dolly() {
 
     // console.log(state) 
     // state.camera.position.z = 10 + Math.sin(state.clock.getElapsedTime() * 4) * 8
-    state.camera.fov = 60 - Math.sin(clock / 4) * 25
+    state.camera.fov = zoom - Math.sin(clock / 4) * 25
     cameraY = Math.sin(clock / 8) * 8
     cameraX = Math.cos(clock / 8) * 8
     cameraZ = Math.sin(clock / 8) * 8
@@ -248,8 +253,8 @@ function SongWindow({ url, data, token }) {
   console.log(data)
   return (
     <div className="spotify-window">
-      <h4 style={{fontSize: "13px", marginBottom: '0', color: "black"}}>{data.track_name} - {data.album}</h4>
-      <h4 style={{fontSize: "13px", marginBottom: '0', color: "black"}}>{data.artist}</h4>
+      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0', color: "black"}}>{data.track_name} - {data.album}</h4>
+      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0', color: "black"}}>{data.artist}</h4>
       <WebPlayback token={token} />
     </div>
   )
