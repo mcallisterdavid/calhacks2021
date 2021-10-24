@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame, useThree} from '@react-three/fiber'
 import { OrbitControls, ScrollControls, Stars, Text, PerspectiveCamera} from "@react-three/drei"
 import jsonFile from './tsneLargeDataset.json'
@@ -66,7 +66,7 @@ function Box(props) {
       onPointerOver={(e) => setHover(true)}
       onPointerOut={(e) => setHover(false)}>
       <sphereGeometry args={[0.15, 28, 14]} />
-      <meshStandardMaterial color={hovered ? 'hotpink' : colors()} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'lightblue'} />
     </mesh>
   )
 }
@@ -97,13 +97,73 @@ function ReadTSNE() {
   return boxes
 }
 
+var clock = 0.0
+var pauseFlag = false
+var lastPress = 0.0
+var cameraX = 0
+var speed = 25
+
 function Dolly() {
   useFrame((state) => {
+
+
+    document.addEventListener('keypress', function(e) {
+
+      if (state.clock.getElapsedTime() - lastPress > 0.3) {
+        lastPress = state.clock.getElapsedTime()
+        if (e.key == " ") {
+          pauseFlag = !pauseFlag
+          leftFlag = false
+          rightFlag = false
+          console.log("EVENT HEARD")
+          console.log(state.clock.getElapsedTime() - lastPress)
+        } else if (e.key == "s") {
+          
+          speed -= 10
+          speed = Math.max(5, speed)
+        } else if (e.key == "f") {
+          speed += 10
+          speed = Math.min(205, speed)
+        }
+        console.log("SPEED: " + speed)
+      }
+    })
+
+    document.addEventListener('keydown', function(e) {
+
+      if (e.key == "ArrowRight") {
+        pauseFlag = true
+        rightFlag = true
+      }
+      if (e.key == "ArrowLeft") {
+        pauseFlag = true
+        leftFlag = true
+      }
+    })
+
+    document.addEventListener('keyup', function(e) {
+
+      if (e.key == "ArrowRight") {
+        rightFlag = false
+      }
+      if (e.key == "ArrowLeft") {
+        leftFlag = false
+      }
+    })
+
+    if (!pauseFlag) {
+      // console.log(clock)
+      clock += state.clock.getDelta() * speed
+    }
+    // else if (rightFlag && !leftFlag) {
+    //   clock += 0.1
+    // }
+    // console.log(state) 
     // state.camera.position.z = 10 + Math.sin(state.clock.getElapsedTime() * 4) * 8
-    state.camera.fov = 60 - Math.sin(state.clock.getElapsedTime() / 4) * 25
-    state.camera.position.y = Math.sin(state.clock.getElapsedTime() / 8) * 8
-    state.camera.position.x = Math.cos(state.clock.getElapsedTime() / 8) * 8
-    state.camera.position.z = Math.sin(state.clock.getElapsedTime() / 8) * 8
+    state.camera.fov = 60 - Math.sin(clock / 4) * 25
+    state.camera.position.y = Math.sin(clock / 8) * 8
+    state.camera.position.x = Math.cos(clock / 8) * 8
+    state.camera.position.z = Math.sin(clock / 8) * 8
     // let point = new useThree.Vector3(0, 0, 0);
     state.camera.lookAt(0, 0, 0)
     state.camera.updateProjectionMatrix()
@@ -138,7 +198,18 @@ function Cloud() {
 }
 
 export default function App() {
-  
+
+
+  // let interval=()=>{
+  //   clock += 1
+  //   // console.log(clock)
+  // }
+
+  // useEffect(() => {
+  //   let intervalID = setInterval(interval, 10)
+  //   return ()=>clearInterval(intervalID)
+
+  // }, [])
   return (
     <Canvas>
       {/* <OrbitControls />
