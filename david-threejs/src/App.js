@@ -13,23 +13,11 @@ function Box(props) {
   var total = 0
   // Rotate mesh every frame, this is outside of React without overhead
   useFrame(() => {
-    // ref.current.rotation.x = ref.current.rotation.y += 0.02
-    // trig += 0.02
-    // ref.current.position.y = Math.sin(trig)
+    
     if (ref.current.name == "Shaylan") {
       ref.current.rotation.x = ref.current.rotation.y += 0.02
       // ref.current.scale.x -= 0.01
     }
-
-
-    // console.log(ref)
-
-    // if (ref.current.name && (typeof ref.current.name) == "number") {
-    //   // console.log(ref.current.name)
-    //   ref.current.rotation.x = ref.current.rotation.y += 0.02*ref.current.name
-    // }
-
-    // console.log(ref.current)
 
   })
 
@@ -61,7 +49,7 @@ function Box(props) {
     <mesh
       {...props}
       ref={ref}
-      scale={hovered ? 1.5 : 1}
+      scale={hovered ? 1.3 : 1}
       onClick={songClicked}
       onPointerOver={(e) => setHover(true)}
       onPointerOut={(e) => setHover(false)}>
@@ -78,6 +66,28 @@ function randomG(v){
       r += Math.random();
   }
   return r / v;
+}
+
+function SongLabel(label, x, y, z) {
+  const ref = useRef()
+  // Set up state for the hovered and active state
+  
+  // Rotate mesh every frame, this is outside of React without overhead
+  useFrame(() => {
+    console.log(ref.current)
+
+
+  })
+  return (
+    <Text
+        color="black" // default
+        anchorX={x}
+        anchorY={y}
+        anchorZ={z}
+      >
+        hello world!
+      </Text>
+  )
 }
 
 
@@ -101,6 +111,8 @@ var clock = 0.0
 var pauseFlag = false
 var lastPress = 0.0
 var cameraX = 0
+var cameraY = 0
+var cameraZ = 0
 var speed = 25
 
 function Dolly() {
@@ -113,41 +125,26 @@ function Dolly() {
         lastPress = state.clock.getElapsedTime()
         if (e.key == " ") {
           pauseFlag = !pauseFlag
-          leftFlag = false
-          rightFlag = false
           console.log("EVENT HEARD")
           console.log(state.clock.getElapsedTime() - lastPress)
         } else if (e.key == "s") {
-          
-          speed -= 10
-          speed = Math.max(5, speed)
+          if (speed > 0) {
+            speed -= 10
+          } else {
+            speed += 10
+          }
+          speed = Math.max(-205, speed)
         } else if (e.key == "f") {
-          speed += 10
+          if (speed < 0) {
+            speed -= 10
+          } else {
+            speed += 10
+          }
           speed = Math.min(205, speed)
+        } else if (e.key == "r") {
+          speed *= -1
         }
         console.log("SPEED: " + speed)
-      }
-    })
-
-    document.addEventListener('keydown', function(e) {
-
-      if (e.key == "ArrowRight") {
-        pauseFlag = true
-        rightFlag = true
-      }
-      if (e.key == "ArrowLeft") {
-        pauseFlag = true
-        leftFlag = true
-      }
-    })
-
-    document.addEventListener('keyup', function(e) {
-
-      if (e.key == "ArrowRight") {
-        rightFlag = false
-      }
-      if (e.key == "ArrowLeft") {
-        leftFlag = false
       }
     })
 
@@ -155,15 +152,16 @@ function Dolly() {
       // console.log(clock)
       clock += state.clock.getDelta() * speed
     }
-    // else if (rightFlag && !leftFlag) {
-    //   clock += 0.1
-    // }
+
     // console.log(state) 
     // state.camera.position.z = 10 + Math.sin(state.clock.getElapsedTime() * 4) * 8
     state.camera.fov = 60 - Math.sin(clock / 4) * 25
-    state.camera.position.y = Math.sin(clock / 8) * 8
-    state.camera.position.x = Math.cos(clock / 8) * 8
-    state.camera.position.z = Math.sin(clock / 8) * 8
+    cameraY = Math.sin(clock / 8) * 8
+    cameraX = Math.cos(clock / 8) * 8
+    cameraZ = Math.sin(clock / 8) * 8
+    state.camera.position.y = cameraY
+    state.camera.position.x = cameraX
+    state.camera.position.z = cameraZ
     // let point = new useThree.Vector3(0, 0, 0);
     state.camera.lookAt(0, 0, 0)
     state.camera.updateProjectionMatrix()
@@ -229,6 +227,7 @@ export default function App() {
       {/* <Cloud /> */}
       <ReadTSNE />
       <Dolly />
+      <SongLabel label="DONKEY" x={10} y={10} z={10} />
     </Canvas>
   )
 }
