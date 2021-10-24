@@ -23,7 +23,7 @@ We are all proud of the end-product that we were able to build. It certainly sur
 ## What we learned
 **🖌️ 3D on the Web** -> Entering this project, none of us had experience implementing demanding graphics in-browser. 
 
-** 📈 ML Applications** -> Taking machine learning from the classroom to a real deployed backend was a new and exciting experience for us. Proving characteristics about different models is important, but feeling the impact of data size, hyperparameters, and runtime put it in context.
+**📈 ML Applications** -> Taking machine learning from the classroom to a real deployed backend was a new and exciting experience for us. Proving characteristics about different models is important, but feeling the impact of data size, hyperparameters, and runtime put it in context.
 
 ## What's next for Sonic Galaxy
 The next step for Sonic Galaxy is to improve the visualization. This can be accomplished by improving our t-SNE algorithm or potentially utilizing others. Another area to explore is gathering more data features or our processing pipeline. Perhaps, we can also integrate with VR in the future. Eventually, we hope we can build a product that might be interesting to integrate with Spotify.
