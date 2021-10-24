@@ -144,6 +144,9 @@ var cameraX = 0
 var cameraY = 0
 var cameraZ = 0
 var speed = 25
+var zoom_i = 1
+var zooms = [55, 60, 75, 90]
+var zoom = 60
 
 function Dolly() {
   useFrame((state) => {
@@ -173,6 +176,9 @@ function Dolly() {
           speed = Math.min(205, speed)
         } else if (e.key == "r") {
           speed *= -1
+        } else if (e.key == "z") {
+          zoom_i = (zoom_i + 1) % 4
+          zoom = zooms[zoom_i]
         }
         console.log("SPEED: " + speed)
       }
@@ -185,7 +191,7 @@ function Dolly() {
 
     // console.log(state) 
     // state.camera.position.z = 10 + Math.sin(state.clock.getElapsedTime() * 4) * 8
-    state.camera.fov = 60 - Math.sin(clock / 4) * 25
+    state.camera.fov = zoom - Math.sin(clock / 4) * 25
     cameraY = Math.sin(clock / 8) * 8
     cameraX = Math.cos(clock / 8) * 8
     cameraZ = Math.sin(clock / 8) * 8
