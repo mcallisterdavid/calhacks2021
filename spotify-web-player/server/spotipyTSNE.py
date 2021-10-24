@@ -116,24 +116,32 @@ def cleanData(df):
     columns_to_normalize = ['popularity', 'danceability', 'energy', 
                                 'loudness', 'speechiness', 'instrumentalness', 
                                 'liveness', 'valence', 'tempo', 'duration_ms']
+    
+    # store mean and std of features before normalization, for restoration later
+    metadata = {}
+    
+    weighted_cols = ['popularity', 'danceability', 'energy', 'instrumentalness']
     for column in columns_to_normalize:
+        scale = 1
+        if column in weighted_cols:
+            scale = .2
+        metadata[column] = (ohe[column].mean(), scale * ohe[column].std())
         ohe[column] = (ohe[column] - ohe[column].mean()) / ohe[column].std()
     
     ohe['artist'] = df['artist']
     ohe['album'] = df['album']
     ohe['track_name'] = df['track_name']
     
-    ohe['popularity'] = 5 * ohe['popularity']
-    ohe['danceability'] = 5 * ohe['danceability']
-    ohe['energy'] = 5 * ohe['energy']
-    ohe['instrumentalness'] = 5 * ohe['instrumentalness']
+#     weighted_cols = ['popularity', 'danceability', 'energy', 'instrumentalness']
+    for col in weighted_cols:
+        ohe[col] = 5 * ohe[col]
     
     ohe['album_cover_url'] = df['album_cover_url']
     
-    return ohe
+    return ohe, metadata
 
 def generate_TSNE(df: pd.DataFrame()):
-    normed_df = cleanData(df)
+    normed_df, metadata = cleanData(df)
     
     # np.random.seed(42)
     time_start = time.time()
@@ -141,8 +149,15 @@ def generate_TSNE(df: pd.DataFrame()):
     tsne_results = tsne.fit_transform(normed_df[normed_df.columns.difference(['artist', 'album', 'track_name', 'album_cover_url'])])
     print('t-SNE done! Time elapsed: {} seconds'.format(time.time()-time_start))
     
-    normed_df['tsne-one'] = tsne_results[:,0] / np.sqrt(tsne_results[:, 0].std())
-    normed_df['tsne-two'] = tsne_results[:,1] / np.sqrt(tsne_results[:, 1].std())
-    normed_df['tsne-three'] = tsne_results[:,2] / np.sqrt(tsne_results[:, 2].std())
+    normed_df['tsne-one'] = tsne_results[:,0] / np.sqrt(tsne_results[:,0].std())
+    normed_df['tsne-two'] = tsne_results[:,1] / np.sqrt(tsne_results[:,1].std())
+    normed_df['tsne-three'] = tsne_results[:,2] / np.sqrt(tsne_results[:,2].std())
+    
+    for column in list(metadata.keys()):
+        normed_df[column] = normed_df[column]*metadata[column][1] + metadata[column][0]
+
+    # normed_df['tsne-one'] = [np.log(x) if x > 0 else -np.log(-x) for x in tsne_results[:,0]]
+    # normed_df['tsne-two'] = [np.log(y) if y > 0 else -np.log(-y) for y in tsne_results[:,1]]
+    # normed_df['tsne-three'] = [np.log(z) if z > 0 else -np.log(-z) for z in tsne_results[:,2]]
     
     return normed_df
