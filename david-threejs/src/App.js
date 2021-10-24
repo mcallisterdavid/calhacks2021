@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame} from '@react-three/fiber'
 import { OrbitControls, ScrollControls, Stars, Text, PerspectiveCamera, Html} from "@react-three/drei"
-import jsonFile from './tsne800Dataset.json'
+import jsonFile from './tsne400Dataset.json'
 
 function Box(props) {
   // This reference will give us direct access to the mesh
@@ -10,6 +10,7 @@ function Box(props) {
   const [hovered, setHover] = useState(false)
   const [active, setActive] = useState(false)
   const [trig, setTrig] = useState(0)
+  var vis = false
   const [annotationVisible, setAnnotationVisible] = useState(false)
   var total = 0
   // Rotate mesh every frame, this is outside of React without overhead
@@ -19,6 +20,11 @@ function Box(props) {
       ref.current.rotation.x = ref.current.rotation.y += 0.02
       // ref.current.scale.x -= 0.01
     }
+    let man_dist = (Math.abs(ref.current.position.x - cameraX) + Math.abs(ref.current.position.y - cameraY) + Math.abs(ref.current.position.z - cameraZ))
+    vis = (man_dist < 10 && man_dist > 6)
+    // console.log(vis)
+    setAnnotationVisible(vis)
+    
 
   })
 
@@ -34,7 +40,6 @@ function Box(props) {
     let x = ref.current.position.x
     let y = ref.current.position.y
     let z = ref.current.position.z
-    console.log("DONKEY")
 
     let r = Math.max(0, Math.min(parseInt(7 * x + 202), 255))
     let g = Math.max(0, Math.min(parseInt(5 * x + 161), 255))
@@ -52,9 +57,9 @@ function Box(props) {
     let y = ref.current.position.y
     let z = ref.current.position.z
 
-    let dx = Math.abs(x - cameraX)
-    let dy = Math.abs(y - cameraY)
-    let dz = Math.abs(z - cameraZ)
+    let dx = Math.abs(ref.current.position.x - cameraX)
+    let dy = Math.abs(ref.current.position.y - cameraY)
+    let dz = Math.abs(ref.current.position.z - cameraZ)
     let manhattan = dx + dy + dz
     console.log(manhattan)
 
@@ -75,7 +80,7 @@ function Box(props) {
       <meshStandardMaterial color={hovered ? 'hotpink' : 'lightblue'} />
       <Html distanceFactor={10}>
         {
-          hovered ? <div className="content">{ref.current.name}</div> : null
+          (annotationVisible || hovered) ? <div className="content">{ref.current.name}</div> : null
         }
         
       </Html>
@@ -120,18 +125,16 @@ function SongLabel(props) {
 function ReadTSNE() {
   console.log(jsonFile)
   let keys = Object.keys(jsonFile)
-  let boxes = []
+  let spheres = []
   for (let i = 0; i < keys.length; i++) {
     let track_id = keys[i]
     let x = jsonFile[track_id]['tsne-one']
     let y = jsonFile[track_id]['tsne-two']
     let z = jsonFile[track_id]['tsne-three']
     // boxes.push(<SongLabel label={track_id} x={x} y={y} z={z} />)
-    boxes.push(<Box key={i} name={jsonFile[track_id]['track_name']} position={[x, y, z]} />)
+    spheres.push(<Box key={i} name={jsonFile[track_id]['track_name']} position={[x, y, z]} />)
   }
-  
-  // console.log(boxes)
-  return boxes
+  return spheres
 }
 
 var clock = 0.0
