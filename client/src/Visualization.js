@@ -19,7 +19,7 @@ function Box(props) {
   // Rotate mesh every frame, this is outside of React without overhead
   useFrame(() => {
     let man_dist = (Math.abs(ref.current.position.x - cameraX) + Math.abs(ref.current.position.y - cameraY) + Math.abs(ref.current.position.z - cameraZ))
-    vis = (man_dist < 10 && man_dist > 6)
+    vis = (man_dist < 10 && man_dist > 7)
     setAnnotationVisible(vis)
   })
 
@@ -253,8 +253,8 @@ function SongWindow({ url, data, token }) {
   console.log(data)
   return (
     <div className="spotify-window">
-      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0', color: "black"}}>{data.track_name} - {data.album}</h4>
-      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0', color: "black"}}>{data.artist}</h4>
+      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0'}}>{data.track_name} - {data.album}</h4>
+      <h4 style={{fontSize: "15px", fontFamily: '"Inter var", sans-serif', marginBottom: '0'}}>{data.artist}</h4>
       <WebPlayback token={token} />
     </div>
   )

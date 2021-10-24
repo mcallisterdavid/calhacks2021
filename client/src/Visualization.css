@@ -39,7 +39,8 @@
     line-break: auto;
     font-size: .875rem;
     word-wrap: break-word;
-    background-color: #fff;
+    background-color: rgba(32, 32, 53, 0.6);
+    color: white;
     background-clip: padding-box;
     border: 3px solid rgba(0,0,0,.2);
     border-radius: .3rem;

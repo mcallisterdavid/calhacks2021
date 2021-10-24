@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Col, ListGroup, ListGroupItem} from 'react-bootstrap';
+import { Container, Col, ListGroup, ListGroupItem, Button} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PlaylistItem from './PlaylistItem'
+import demoData from './tsne400Dataset.json'
 
 function PlaylistPicker({ token, setSelectedPlaylist, setTsneData }) {
 
@@ -67,7 +68,12 @@ function PlaylistPicker({ token, setSelectedPlaylist, setTsneData }) {
         if (playlists) {
             return (
                 <Container style={{overflowY: "scroll", height: "100vh"}}>
-                    <h1>Pick a Playlist to visualize.</h1>
+                    <h1>Pick a Playlist to visualize or enter the demo. We ran into some compute-time issues when hosting so the demo uses a pre-computed data mapping.</h1>
+                    <Button onClick={() => {
+                        setSelectedPlaylist("demo");
+                        setUserData({id: "Demo User"});
+                        setTsneData(demoData);
+                    }}>Enter Demo!</Button>
                     <Col>
                         <ListGroup>
                             {playlists.map(playlist => <ListGroupItem key={playlist.id} onClick={grabTsneData.bind(this, playlist.id)} className="py-3 sm" action ><PlaylistItem data={playlist} /></ListGroupItem>)}
