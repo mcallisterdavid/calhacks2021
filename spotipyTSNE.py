@@ -22,14 +22,19 @@ def main():
 	                                   redirect_uri=SPOTIPY_REDIRECT_URI
 	                                  )
 
-	playlistID = '2NQemdvdAfjpxKymXLilBK' # test playlistID input
-	playlistSongs = getPlaylistSongs(username, playlistID, token) # dataframe of the songs in playlistID
-	data = generate_TSNE(playlistSongs) # adds three columns to prev df, with TSNE coords
-	return data[['artist', 'album', 'track_name', 'album_cover_url', 'tsne-one', 'tsne-two', 'tsne-three']]
+    # test playlistID input
+	playlistID = '2NQemdvdAfjpxKymXLilBK'
 
-# get the playlists for the username and token; can print this intermediately
-# also gets the playlist IDs; might want dictionary of playlist name to playlistID
+    # dataframe of the songs in playlistID
+	playlistSongs = getPlaylistSongs(username, playlistID, token)
 
+    # adds three columns to prev df, with TSNE coords
+	data = generate_TSNE(playlistSongs) 
+
+	return data[['artist', 'album', 'track_name', 'album_cover_url', 
+                    'tsne-one', 'tsne-two', 'tsne-three']].to_json(orient='index')
+
+# get the playlists for the username and token; not needed for current implementation
 def getUserPlaylists(username, token):
     if token: 
         sp = spotipy.Spotify(auth=token)
