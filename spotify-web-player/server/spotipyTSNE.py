@@ -1,30 +1,12 @@
 import numpy as np
 import pandas as pd
+from sklearn.manifold import TSNE
 import spotipy
 import spotipy.util as util
-from sklearn.manifold import TSNE
 import time
 
 
-def main():
-
-	# configure token
-
-	SPOTIPY_CLIENT_ID="70c49e55eae64f0a82b313830c6cebf3"
-	SPOTIPY_CLIENT_SECRET="cb5063c70a514acebca3481a37f15e01"
-	SPOTIPY_REDIRECT_URI = "http://localhost"
-	username='axw2001d'
-	scope="playlist-read-private"
-	token = util.prompt_for_user_token(username, 
-	                                   scope, 
-	                                   client_id=SPOTIPY_CLIENT_ID, 
-	                                   client_secret=SPOTIPY_CLIENT_SECRET, 
-	                                   redirect_uri=SPOTIPY_REDIRECT_URI
-	                                  )
-
-    # test playlistID input
-	playlistID = '2NQemdvdAfjpxKymXLilBK'
-
+def tsne_spotify(token, username, playlistID):
     # dataframe of the songs in playlistID
 	playlistSongs = getPlaylistSongs(username, playlistID, token)
 
@@ -159,5 +141,3 @@ def generate_TSNE(df: pd.DataFrame()):
     normed_df['tsne-three'] = tsne_results[:,2]
     
     return normed_df
-
-main()

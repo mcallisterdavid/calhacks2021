@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, send_from_directory
+from flask import Flask, request, redirect, send_from_directory, jsonify
 from urllib.parse import urlencode
 import requests
 from requests.auth import HTTPBasicAuth
@@ -7,6 +7,8 @@ import base64
 from random import random
 import math
 import os
+
+from spotipyTSNE import tsne_spotify
 
 app = Flask(__name__)
 
@@ -82,3 +84,11 @@ def auth_callback():
         access_token = data['access_token']
         print(access_token)
         return redirect('/?' + urlencode({'access_token': access_token}))
+
+@app.route('/data/tsne', methods=['POST'])
+def tsne_data():
+    data = request.json
+    token = data['access_token']
+    username = data['userId']
+    playlistID = data['playlistId']
+    return tsne_spotify(token, username, playlistID)

@@ -33,9 +33,10 @@ function PlaylistPicker({ token, setSelectedPlaylist, setUserData }) {
         if (playlists) {
             return (
                 <Container>
+                    <h1>Pick a Playlist to visualize.</h1>
                     <Col>
                         <ListGroup>
-                            {playlists.map(playlist => <ListGroupItem onClick={() => setSelectedPlaylist(playlist.id)} className="py-3 sm" action ><PlaylistItem data={playlist} key={playlist.id} /></ListGroupItem>)}
+                            {playlists.map(playlist => <ListGroupItem key={playlist.id} onClick={() => setSelectedPlaylist(playlist.id)} className="py-3 sm" action ><PlaylistItem data={playlist} /></ListGroupItem>)}
                         </ListGroup>
                     </Col>
                 </Container>

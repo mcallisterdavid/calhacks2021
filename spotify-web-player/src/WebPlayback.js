@@ -12,12 +12,12 @@ const track = {
     ]
 }
 
-function WebPlayback(props) {
+function WebPlayback({token, uri}) {
 
     const [player, setPlayer] = useState(undefined);
     const [is_paused, setPaused] = useState(false);
     const [is_active, setActive] = useState(false);
-    const [current_track, setTrack] = useState(track);
+    const [current_track, setTrack] = useState('');
 
     useEffect(() => {
 
@@ -31,7 +31,7 @@ function WebPlayback(props) {
     
             const player = new window.Spotify.Player({
                 name: 'Web Playback SDK',
-                getOAuthToken: cb => { cb(props.token); },
+                getOAuthToken: cb => { cb(token); },
                 volume: 0.5
             });
     
@@ -39,6 +39,15 @@ function WebPlayback(props) {
     
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
+                // TODO: make call to set the playback to this device
+                fetch("https://api.spotify.com/v1/me/player", {
+                    body: `{\n  "device_ids": [\n"${device_id}"\n], "start": true\n}`,
+                    headers: {
+                    "Authorization": "Bearer " + token,
+                      "Content-Type": "application/json"
+                    },
+                    method: "PUT"
+                  })
             });
     
             player.addListener('not_ready', ({ device_id }) => {
@@ -61,28 +70,30 @@ function WebPlayback(props) {
             
             }));
     
-    
             player.connect();
-    
         };
     }, []);
 
     return (
         <>
-            <div className="container">
+            <div className="webplayback">
                 <div className="main-wrapper">
-                    <img src={current_track.album.images[0].url} 
-                         className="now-playing__cover" alt="" />
-    
-                    <div className="now-playing__side">
-                        <div className="now-playing__name">{
-                                      current_track.name
-                                      }</div>
-    
-                        <div className="now-playing__artist">{
-                                      current_track.artists[0].name
-                                      }</div>
-                    </div>
+                    {current_track && 
+                        <>
+                        <img src={current_track.album.images[0].url} 
+                            className="now-playing__cover" alt="" />
+        
+                        <div className="now-playing__side">
+                            <div className="now-playing__name">{
+                                        current_track.name
+                                        }</div>
+        
+                            <div className="now-playing__artist">{
+                                        current_track.artists[0].name
+                                        }</div>
+                        </div>
+                        </>
+                    }
                     <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
                         &lt;&lt;
                     </button>
