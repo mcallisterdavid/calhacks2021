@@ -21,7 +21,7 @@
     "@types/three": "0.133.1"
   },
   "scripts": {
-    "start": "gunicorn server.app:app",
+    "start": "gunicorn app:app",
     "build": "cd client && npm install && npm run build"
   },
   "eslintConfig": {
